@@ -1,6 +1,6 @@
 # VroomJs [![NuGet](https://img.shields.io/nuget/v/VroomJs.svg?maxAge=2592000)](https://www.nuget.org/packages/VroomJs/)
 
-This is a version of VroomJs that can on on the new .NET Core runtime. 
+This is a forked version of VrooMJs that focuses on cross platform.
 
 ## Examples
 
@@ -74,28 +74,6 @@ Call this method on start of your application.
 
 ### Mac/Linux
 
-The native libraries used in this project must be manually built for Mac/Linux. We are using a forked version of VroomJs used by [ReactJS.NET](http://reactjs.net/). The instructions to generate a native assembly are the same (found [here](http://reactjs.net/guides/mono.html)).
+And here things get complicated.
 
-```bash
-# Get a supported version of V8
-cd /usr/local/src/
-git clone https://github.com/v8/v8.git v8-3.17
-cd v8-3.17
-git checkout tags/3.17.16.2
-
-# Build V8
-make dependencies
-make native werror=no library=shared soname_version=3.17.16.2 -j4
-cp out/native/lib.target/libv8.so.3.17.16.2 /usr/local/lib/
-
-# Get VroomJs's version of libvroomjs
-cd /usr/local/src/
-git clone https://github.com/pauldotknopf/vroomjs-core.git
-cd vroomjs-core
-cd native/libVroomJs/
-
-# Build libvroomjs
-g++ jscontext.cpp jsengine.cpp managedref.cpp bridge.cpp jsscript.cpp -o libVroomJsNative.so -shared -L /usr/local/src/v8-3.17/out/native/lib.target/ -I /usr/local/src/v8-3.17/include/ -fPIC -Wl,--no-as-needed -l:/usr/local/lib/libv8.so.3.17.16.2
-cp libVroomJsNative.so /usr/local/lib/
-ldconfig
-```
+v8 is now at version 6 or more as of writing and only available from package managers on Ubuntu/Debian up to version 3. Firstly, that must be installed and can be done so either through `sudo apt-get install libv8-dev` on Linux. As of writing, the repository version is v3.14. Next you need a binary of VrooMJs. Good luck.
