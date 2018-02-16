@@ -33,42 +33,42 @@ namespace VroomJs
 {
   public partial class JsContext : IDisposable
   {
-    private const string nativeName = "VroomJsNative";
+    public const string NativeFileName = "VroomJsNative";
 
-    [DllImport(nativeName, CallingConvention = CallingConvention.StdCall)]
+    [DllImport(NativeFileName, CallingConvention = CallingConvention.StdCall)]
     static extern IntPtr jscontext_new(int id, IntPtr engine);
 
-    [DllImport(nativeName, CallingConvention = CallingConvention.StdCall)]
+    [DllImport(NativeFileName, CallingConvention = CallingConvention.StdCall)]
     public static extern void jscontext_dispose(IntPtr engine);
 
-    [DllImport(nativeName, CallingConvention = CallingConvention.StdCall)]
+    [DllImport(NativeFileName, CallingConvention = CallingConvention.StdCall)]
     static extern void jscontext_force_gc();
 
-    [DllImport(nativeName, CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode)]
+    [DllImport(NativeFileName, CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode)]
     static extern JsValue jscontext_execute(IntPtr context, [MarshalAs(UnmanagedType.LPWStr)] string str, [MarshalAs(UnmanagedType.LPWStr)] string name);
 
-    [DllImport(nativeName, CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode)]
+    [DllImport(NativeFileName, CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode)]
     static extern JsValue jscontext_execute_script(IntPtr context, IntPtr script);
 
-    [DllImport(nativeName, CallingConvention = CallingConvention.StdCall)]
+    [DllImport(NativeFileName, CallingConvention = CallingConvention.StdCall)]
     static extern JsValue jscontext_get_global(IntPtr engine);
 
-    [DllImport(nativeName, CallingConvention = CallingConvention.StdCall)]
+    [DllImport(NativeFileName, CallingConvention = CallingConvention.StdCall)]
     static extern JsValue jscontext_get_variable(IntPtr engine, [MarshalAs(UnmanagedType.LPWStr)] string name);
 
-    [DllImport(nativeName, CallingConvention = CallingConvention.StdCall)]
+    [DllImport(NativeFileName, CallingConvention = CallingConvention.StdCall)]
     static extern JsValue jscontext_set_variable(IntPtr engine, [MarshalAs(UnmanagedType.LPWStr)] string name, JsValue value);
 
-    [DllImport(nativeName, CallingConvention = CallingConvention.StdCall)]
+    [DllImport(NativeFileName, CallingConvention = CallingConvention.StdCall)]
     internal static extern JsValue jsvalue_alloc_string([MarshalAs(UnmanagedType.LPWStr)] string str);
 
-    [DllImport(nativeName, CallingConvention = CallingConvention.StdCall)]
+    [DllImport(NativeFileName, CallingConvention = CallingConvention.StdCall)]
     internal static extern JsValue jsvalue_alloc_array(int length);
 
-    [DllImport(nativeName, CallingConvention = CallingConvention.StdCall)]
+    [DllImport(NativeFileName, CallingConvention = CallingConvention.StdCall)]
     internal static extern void jsvalue_dispose(JsValue value);
 
-    [DllImport(nativeName, CallingConvention = CallingConvention.StdCall)]
+    [DllImport(NativeFileName, CallingConvention = CallingConvention.StdCall)]
     internal static extern JsValue jscontext_invoke(IntPtr engine, IntPtr funcPtr, IntPtr thisPtr, JsValue args);
 
     private readonly int _id;

@@ -7,16 +7,16 @@ namespace VroomJs
 {
 	public partial class JsContext {
 
-		[DllImport("VroomJsNative")]
+		[DllImport(NativeFileName)]
 		static extern JsValue jscontext_get_property_names(IntPtr engine, IntPtr ptr);
 
-		[DllImport("VroomJsNative")]
+		[DllImport(NativeFileName)]
 		static extern JsValue jscontext_get_property_value(IntPtr engine, IntPtr ptr, [MarshalAs(UnmanagedType.LPWStr)] string name);
 
-		[DllImport("VroomJsNative")]
+		[DllImport(NativeFileName)]
 		static extern JsValue jscontext_set_property_value(IntPtr engine, IntPtr ptr, [MarshalAs(UnmanagedType.LPWStr)] string name, JsValue value);
 
-		[DllImport("VroomJsNative")]
+		[DllImport(NativeFileName)]
 		static extern JsValue jscontext_invoke_property(IntPtr engine, IntPtr ptr, [MarshalAs(UnmanagedType.LPWStr)] string name, JsValue args);
 	
 		public IEnumerable<string> GetMemberNames(JsObject obj) 

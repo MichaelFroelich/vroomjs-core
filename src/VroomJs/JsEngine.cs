@@ -14,13 +14,13 @@ namespace VroomJs {
 		delegate JsValue KeepAliveDeletePropertyDelegate(int context, int slot, [MarshalAs(UnmanagedType.LPWStr)] string name);
 		delegate JsValue KeepAliveEnumeratePropertiesDelegate(int context, int slot);
 
-		[DllImport("VroomJsNative", CallingConvention = CallingConvention.StdCall)]
+		[DllImport(JsContext.NativeFileName, CallingConvention = CallingConvention.StdCall)]
 		static extern void js_set_object_marshal_type(JsObjectMarshalType objectMarshalType);
 
-		[DllImport("VroomJsNative", CallingConvention = CallingConvention.StdCall)]
+		[DllImport(JsContext.NativeFileName, CallingConvention = CallingConvention.StdCall)]
 		static extern void js_dump_allocated_items();
 
-		[DllImport("VroomJsNative", CallingConvention = CallingConvention.StdCall)]
+		[DllImport(JsContext.NativeFileName, CallingConvention = CallingConvention.StdCall)]
 		static extern IntPtr jsengine_new(
 			KeepaliveRemoveDelegate keepaliveRemove,
 			KeepAliveGetPropertyValueDelegate keepaliveGetPropertyValue,
@@ -32,16 +32,16 @@ namespace VroomJs {
 			int maxYoungSpace, int maxOldSpace
 		);
 		
-		[DllImport("VroomJsNative", CallingConvention = CallingConvention.StdCall)]
+		[DllImport(JsContext.NativeFileName, CallingConvention = CallingConvention.StdCall)]
 		static extern void jsengine_terminate_execution(IntPtr engine);
 			
-		[DllImport("VroomJsNative", CallingConvention = CallingConvention.StdCall)]
+		[DllImport(JsContext.NativeFileName, CallingConvention = CallingConvention.StdCall)]
 		static extern void jsengine_dump_heap_stats(IntPtr engine);
 
-		[DllImport("VroomJsNative", CallingConvention = CallingConvention.StdCall)]
+		[DllImport(JsContext.NativeFileName, CallingConvention = CallingConvention.StdCall)]
 		static extern void jsengine_dispose(IntPtr engine);
 
-		[DllImport("VroomJsNative")]
+		[DllImport(JsContext.NativeFileName)]
 		static extern void jsengine_dispose_object(IntPtr engine, IntPtr obj);
 		
 		// Make sure the delegates we pass to the C++ engine won't fly away during a GC.
@@ -70,13 +70,13 @@ namespace VroomJs {
 		readonly IntPtr _engine;
 
 		public JsEngine(int maxYoungSpace = -1, int maxOldSpace = -1) {
-			_keepalive_remove = new KeepaliveRemoveDelegate(KeepAliveRemove);
-			_keepalive_get_property_value = new KeepAliveGetPropertyValueDelegate(KeepAliveGetPropertyValue);
-			_keepalive_set_property_value = new KeepAliveSetPropertyValueDelegate(KeepAliveSetPropertyValue);
-			_keepalive_valueof = new KeepAliveValueOfDelegate(KeepAliveValueOf);
-			_keepalive_invoke = new KeepAliveInvokeDelegate(KeepAliveInvoke);
-			_keepalive_delete_property = new KeepAliveDeletePropertyDelegate(KeepAliveDeleteProperty);
-			_keepalive_enumerate_properties = new KeepAliveEnumeratePropertiesDelegate(KeepAliveEnumerateProperties);
+			_keepalive_remove = KeepAliveRemove;
+			_keepalive_get_property_value = KeepAliveGetPropertyValue;
+			_keepalive_set_property_value = KeepAliveSetPropertyValue;
+			_keepalive_valueof = KeepAliveValueOf;
+			_keepalive_invoke = KeepAliveInvoke;
+			_keepalive_delete_property = KeepAliveDeleteProperty;
+			_keepalive_enumerate_properties = KeepAliveEnumerateProperties;
 			
 			_engine = jsengine_new(
 				_keepalive_remove,

@@ -5,13 +5,12 @@
     <Copyright>2016</Copyright>
     <VersionPrefix>1.2.2</VersionPrefix>
     <Authors>Paul</Authors>
-    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
     <AssemblyName>VroomJs</AssemblyName>
     <PackageId>VroomJs</PackageId>
     <PackageTags>javascript;v8</PackageTags>
     <PackageProjectUrl>https://github.com/pauldotknopf/vroomjs-core</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/pauldotknopf/vroomjs-core/blob/master/LICENSE</PackageLicenseUrl>
-    <PackageTargetFallback Condition=" '$(TargetFramework)' == 'netstandard2.0' ">$(PackageTargetFallback);dnxcore50;portable-net451+win8</PackageTargetFallback>
     <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
     <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>

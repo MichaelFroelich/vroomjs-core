@@ -64,9 +64,6 @@ namespace VroomJs
     {
       if (_isLoaded) return;
 
-      if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-        throw new Exception("EnsureLoaded: May only be used on Windows platforms. For other platforms, you must manually build VroomJsNative.dll");
-
       lock (_lock)
       {
         if (_isLoaded) return;
@@ -99,7 +96,9 @@ namespace VroomJs
 
     private static void LoadDllLinux()
     {
-      throw new NotImplementedException();
+      if (Environment.Is64BitOperatingSystem)
+      {
+      }
     }
 
     private static void LoadDllMac()
