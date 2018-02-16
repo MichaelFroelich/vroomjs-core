@@ -4,6 +4,9 @@ using System.Runtime.InteropServices;
 
 namespace VroomJs
 {
+  using System.Linq;
+  using System.Reflection;
+
   public static class AssemblyLoader
   {
     public static object _lock = new object();
@@ -96,14 +99,27 @@ namespace VroomJs
 
     private static void LoadDllLinux()
     {
+      string file = "VroomJsNative";
+      file += Environment.Is64BitOperatingSystem ? "64" : "32";
+      file += ".so"; //FileExtension;
       if (Environment.Is64BitOperatingSystem)
       {
+        using (Stream stm = typeof(JsEngine).Assembly.GetManifestResourceStream(file))
+        {
+        }
       }
     }
-
+    
     private static void LoadDllMac()
     {
       throw new NotImplementedException();
+    }
+
+    public static Stream GetEmbeddedResourceFile(string filename)
+    {
+      var assembly = Assembly.GetExecutingAssembly();
+      Stream resourceStream = assembly.GetManifestResourceStream(assembly.GetManifestResourceNames().Single(me => me.Contains(filename)));
+      return resourceStream;
     }
   }
 }

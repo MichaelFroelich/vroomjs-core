@@ -29,8 +29,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\..\native\compiled\VroomJsNative32.so" Link="VroomJsNative32.so" />
-    <None Include="..\..\native\compiled\VroomJsNative64.so" Link="VroomJsNative64.so" />
+    <EmbeddedResource Include="..\..\native\compiled\VroomJsNative32.so" Link="VroomJsNative32.so" />
+    <EmbeddedResource Include="..\..\native\compiled\VroomJsNative64.so" Link="VroomJsNative64.so" />
   </ItemGroup>
 
   <ItemGroup>
