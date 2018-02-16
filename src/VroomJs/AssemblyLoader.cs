@@ -9,10 +9,12 @@ namespace VroomJs
     public static object _lock = new object();
     public static bool _isLoaded = false;
 
+    private static readonly string FileExtension = Environment.OSVersion.Platform == PlatformID.Unix ? ".so" : ".dll";
+
     [DllImport("kernel32", SetLastError = true, CharSet = CharSet.Unicode)]
     static extern IntPtr LoadLibrary(string lpFileName);
 
-    private static void LoadDll(string dllName, string architecture)
+    private static void LoadDllWindows(string dllName, string architecture)
     {
       var dirName = Path.Combine(Path.GetTempPath(), "VroomJs");
 
@@ -24,10 +26,10 @@ namespace VroomJs
       if (!Directory.Exists(dirName))
         Directory.CreateDirectory(dirName);
 
-      var dllPath = Path.Combine(dirName, dllName + ".dll");
+      var dllPath = Path.Combine(dirName, dllName + FileExtension);
 
 
-      using (Stream stm = typeof(JsEngine).Assembly.GetManifestResourceStream("VroomJs." + dllName + "-" + architecture + ".dll"))
+      using (Stream stm = typeof(JsEngine).Assembly.GetManifestResourceStream("VroomJs." + dllName + "-" + architecture + FileExtension))
       {
         try
         {
@@ -70,18 +72,39 @@ namespace VroomJs
         if (_isLoaded) return;
         _isLoaded = true;
 
-        if (Environment.Is64BitOperatingSystem)
+        switch (Environment.OSVersion.Platform)
         {
-          LoadDll("v8", "x64");
-          LoadDll("VroomJsNative", "x64");
+          case PlatformID.MacOSX:
+            LoadDllMac();
+            break;
+          case PlatformID.Unix:
+            LoadDllLinux();
+            break;
+          default:
+            if (Environment.Is64BitOperatingSystem)
+            {
+              LoadDllWindows("v8", "x64");
+              LoadDllWindows("VroomJsNative", "x64");
 
-        }
-        else
-        {
-          LoadDll("v8", "x86");
-          LoadDll("VroomJsNative", "x86");
+            }
+            else
+            {
+              LoadDllWindows("v8", "x86");
+              LoadDllWindows("VroomJsNative", "x86");
+            }
+            break;
         }
       }
+    }
+
+    private static void LoadDllLinux()
+    {
+      throw new NotImplementedException();
+    }
+
+    private static void LoadDllMac()
+    {
+      throw new NotImplementedException();
     }
   }
 }

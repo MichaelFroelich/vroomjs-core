@@ -30,6 +30,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="..\..\native\compiled\VroomJsNative32.so" Link="VroomJsNative32.so" />
+    <None Include="..\..\native\compiled\VroomJsNative64.so" Link="VroomJsNative64.so" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.CSharp" Version="4.4.1" />
   </ItemGroup>
 
