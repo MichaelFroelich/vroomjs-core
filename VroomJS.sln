@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sandbox", "src\Sandbox\Sand
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VroomJs", "src\VroomJs\VroomJs.csproj", "{8971EFE7-4922-4FCA-9FD2-908B3077BDB4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VroomJsTest", "VroomJsTest\VroomJsTest.csproj", "{BF5F6C90-4170-41E1-8A3B-2358A40560DC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,18 @@ Global
 		{8971EFE7-4922-4FCA-9FD2-908B3077BDB4}.Release|x64.Build.0 = Release|Any CPU
 		{8971EFE7-4922-4FCA-9FD2-908B3077BDB4}.Release|x86.ActiveCfg = Release|Any CPU
 		{8971EFE7-4922-4FCA-9FD2-908B3077BDB4}.Release|x86.Build.0 = Release|Any CPU
+		{BF5F6C90-4170-41E1-8A3B-2358A40560DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF5F6C90-4170-41E1-8A3B-2358A40560DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF5F6C90-4170-41E1-8A3B-2358A40560DC}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{BF5F6C90-4170-41E1-8A3B-2358A40560DC}.Debug|x64.Build.0 = Debug|Any CPU
+		{BF5F6C90-4170-41E1-8A3B-2358A40560DC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BF5F6C90-4170-41E1-8A3B-2358A40560DC}.Debug|x86.Build.0 = Debug|Any CPU
+		{BF5F6C90-4170-41E1-8A3B-2358A40560DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF5F6C90-4170-41E1-8A3B-2358A40560DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF5F6C90-4170-41E1-8A3B-2358A40560DC}.Release|x64.ActiveCfg = Release|Any CPU
+		{BF5F6C90-4170-41E1-8A3B-2358A40560DC}.Release|x64.Build.0 = Release|Any CPU
+		{BF5F6C90-4170-41E1-8A3B-2358A40560DC}.Release|x86.ActiveCfg = Release|Any CPU
+		{BF5F6C90-4170-41E1-8A3B-2358A40560DC}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -64,6 +78,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{1FF5093A-97D0-4692-A4CD-A5939CDF1096} = {8C87E388-CD2C-47F7-84A6-4FC247F71F6C}
 		{8971EFE7-4922-4FCA-9FD2-908B3077BDB4} = {8C87E388-CD2C-47F7-84A6-4FC247F71F6C}
+		{BF5F6C90-4170-41E1-8A3B-2358A40560DC} = {8C87E388-CD2C-47F7-84A6-4FC247F71F6C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D751EF9D-164C-4D99-B8B6-8F8B60A6C6F8}
