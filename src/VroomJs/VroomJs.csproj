@@ -1,0 +1,44 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>An embedded V8 engine for .NET CLR and .NET Core.</Description>
+    <Copyright>2016</Copyright>
+    <VersionPrefix>1.2.2</VersionPrefix>
+    <Authors>Paul</Authors>
+    <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
+    <AssemblyName>VroomJs</AssemblyName>
+    <PackageId>VroomJs</PackageId>
+    <PackageTags>javascript;v8</PackageTags>
+    <PackageProjectUrl>https://github.com/pauldotknopf/vroomjs-core</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/pauldotknopf/vroomjs-core/blob/master/LICENSE</PackageLicenseUrl>
+    <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
+    <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="..\..\native\compiled\v8-x86.dll;..\..\native\compiled\v8-x64.dll;..\..\native\compiled\VroomJsNative-x86.dll;..\..\native\compiled\VroomJsNative-x64.dll" Exclude="bin\**;obj\**;**\*.xproj;packages\**;@(EmbeddedResource)" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
+    <PackageReference Include="System.Dynamic.Runtime" Version="4.3.0" />
+    <PackageReference Include="System.Reflection.TypeExtensions" Version="4.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="..\..\native\compiled\VroomJsNative32.so" Link="VroomJsNative32.so" />
+    <EmbeddedResource Include="..\..\native\compiled\VroomJsNative64.so" Link="VroomJsNative64.so" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CSharp" Version="4.4.1" />
+  </ItemGroup>
+
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
+    <DefineConstants>$(DefineConstants);DOTNETCORE</DefineConstants>
+  </PropertyGroup>
+
+</Project>

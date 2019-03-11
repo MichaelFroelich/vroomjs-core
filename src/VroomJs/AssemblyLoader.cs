@@ -1,100 +1,125 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Threading.Tasks;
 
 namespace VroomJs
 {
-    public static class AssemblyLoader
+  using System.Linq;
+  using System.Reflection;
+
+  public static class AssemblyLoader
+  {
+    public static object _lock = new object();
+    public static bool _isLoaded = false;
+
+    private static readonly string FileExtension = Environment.OSVersion.Platform == PlatformID.Unix ? ".so" : ".dll";
+
+    [DllImport("kernel32", SetLastError = true, CharSet = CharSet.Unicode)]
+    static extern IntPtr LoadLibrary(string lpFileName);
+
+    private static void LoadDllWindows(string dllName, string architecture)
     {
-        public static object _lock = new object();
-        public static bool _isLoaded = false;
+      var dirName = Path.Combine(Path.GetTempPath(), "VroomJs");
 
-        [DllImport("kernel32", SetLastError = true, CharSet = CharSet.Unicode)]
-        static extern IntPtr LoadLibrary(string lpFileName);
+      if (!Directory.Exists(dirName))
+        Directory.CreateDirectory(dirName);
 
-        private static void LoadDll(string dllName, string architecture)
+      dirName = Path.Combine(dirName, architecture);
+
+      if (!Directory.Exists(dirName))
+        Directory.CreateDirectory(dirName);
+
+      var dllPath = Path.Combine(dirName, dllName + FileExtension);
+
+
+      using (Stream stm = typeof(JsEngine).Assembly.GetManifestResourceStream("VroomJs." + dllName + "-" + architecture + FileExtension))
+      {
+        try
         {
-            var dirName = Path.Combine(Path.GetTempPath(), "VroomJs");
-
-            if (!Directory.Exists(dirName))
-                Directory.CreateDirectory(dirName);
-
-            dirName = Path.Combine(dirName, architecture);
-
-            if (!Directory.Exists(dirName))
-                Directory.CreateDirectory(dirName);
-
-            var dllPath = Path.Combine(dirName, dllName + ".dll");
-
-#if DOTNETCORE
-            using (Stream stm = typeof(JsEngine).GetTypeInfo().Assembly.GetManifestResourceStream("VroomJs." + dllName + "-" + architecture + ".dll"))
-#else
-            using (Stream stm = typeof(JsEngine).Assembly.GetManifestResourceStream("VroomJs." + dllName + "-" + architecture + ".dll"))
-#endif
-
+          using (Stream outFile = File.Create(dllPath))
+          {
+            const int sz = 4096;
+            byte[] buf = new byte[sz];
+            while (true)
             {
-                try
-                {
-                    using (Stream outFile = File.Create(dllPath))
-                    {
-                        const int sz = 4096;
-                        byte[] buf = new byte[sz];
-                        while (true)
-                        {
-                            int nRead = stm.Read(buf, 0, sz);
-                            if (nRead < 1)
-                                break;
-                            outFile.Write(buf, 0, nRead);
-                        }
-                    }
-                }
-                catch
-                {
-                    // This may happen if another process has already created and loaded the file.
-                    // Since the directory includes the version number of this assembly we can
-                    // assume that it's the same bits, so we just ignore the excecption here and
-                    // load the DLL.
-                }
+              int nRead = stm.Read(buf, 0, sz);
+              if (nRead < 1)
+                break;
+              outFile.Write(buf, 0, nRead);
             }
-
-            IntPtr h = LoadLibrary(dllPath);
-            if (h == IntPtr.Zero)
-                throw new Exception("Couldn't load native assembly at " + dllPath);
+          }
         }
-
-        public static void EnsureLoaded()
+        catch
         {
-            if (_isLoaded) return;
-
-#if DOTNETCORE
-            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                throw new Exception("EnsureLoaded: May only be used on Windows platforms. For other platforms, you must manually build VroomJsNative.dll");
-#endif
-
-            lock (_lock)
-            {
-                if (_isLoaded) return;
-                _isLoaded = true;
-
-                if(IntPtr.Size == 4)
-                {
-                    LoadDll("v8", "x86");
-                    LoadDll("VroomJsNative", "x86");
-                }
-                else if(IntPtr.Size == 8)
-                {
-                    LoadDll("v8", "x64");
-                    LoadDll("VroomJsNative", "x64");
-                }
-                else
-                {
-                    // THE FUTURE!
-                    throw new Exception("Unknown pointer size " + IntPtr.Size);
-                }
-            }
+          // This may happen if another process has already created and loaded the file.
+          // Since the directory includes the version number of this assembly we can
+          // assume that it's the same bits, so we just ignore the excecption here and
+          // load the DLL.
         }
+      }
+
+      IntPtr h = LoadLibrary(dllPath);
+      if (h == IntPtr.Zero)
+        throw new Exception("Couldn't load native assembly at " + dllPath);
     }
+
+    public static void EnsureLoaded()
+    {
+      if (_isLoaded) return;
+
+      lock (_lock)
+      {
+        if (_isLoaded) return;
+        _isLoaded = true;
+
+        switch (Environment.OSVersion.Platform)
+        {
+          case PlatformID.MacOSX:
+            LoadDllMac();
+            break;
+          case PlatformID.Unix:
+            LoadDllLinux();
+            break;
+          default:
+            if (Environment.Is64BitOperatingSystem)
+            {
+              LoadDllWindows("v8", "x64");
+              LoadDllWindows("VroomJsNative", "x64");
+
+            }
+            else
+            {
+              LoadDllWindows("v8", "x86");
+              LoadDllWindows("VroomJsNative", "x86");
+            }
+            break;
+        }
+      }
+    }
+
+    private static void LoadDllLinux()
+    {
+      string file = "VroomJsNative";
+      file += Environment.Is64BitOperatingSystem ? "64" : "32";
+      file += ".so"; //FileExtension;
+      if (Environment.Is64BitOperatingSystem)
+      {
+        using (Stream stm = typeof(JsEngine).Assembly.GetManifestResourceStream(file))
+        {
+        }
+      }
+    }
+    
+    private static void LoadDllMac()
+    {
+      throw new NotImplementedException();
+    }
+
+    public static Stream GetEmbeddedResourceFile(string filename)
+    {
+      var assembly = Assembly.GetExecutingAssembly();
+      Stream resourceStream = assembly.GetManifestResourceStream(assembly.GetManifestResourceNames().Single(me => me.Contains(filename)));
+      return resourceStream;
+    }
+  }
 }
